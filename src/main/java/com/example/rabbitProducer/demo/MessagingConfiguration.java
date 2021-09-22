@@ -15,12 +15,18 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "messaging")
 @Data
 public class MessagingConfiguration {
+    
+    
+    @Value("${spring.rabbitmq.host}")
+    String host;
+    @Value("${spring.rabbitmq.port}")
+    int port;
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setPort(port);
+        connectionFactory.setHost(host);
         connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         connectionFactory.setPublisherReturns(true);
         return connectionFactory;
